@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Clothing Shop</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:
+    linear-gradient(rgba(255,255,255,0.85),rgba(255,255,255,0.9)),
+    url("https://images.unsplash.com/photo-1445205170230-053b83016050");
+    background-size:cover;
+    background-attachment:fixed;
+    min-height:100vh;
+}
+
+/* NAVBAR */
+.navbar{
+    backdrop-filter: blur(12px);
+    background: rgba(0,0,0,0.75);
+    border-radius:0 0 15px 15px;
+}
+
+/* CARD */
+.card{
+    border:none;
+    border-radius:18px;
+    transition:0.3s ease;
+    box-shadow:0 10px 30px rgba(0,0,0,0.12);
+    background: rgba(255,255,255,0.95);
+    animation: fadeIn 0.5s ease;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 20px 45px rgba(0,0,0,0.2);
+}
+
+/* BUTTON */
+.btn-success{
+    background:#27ae60;
+    border:none;
+    border-radius:10px;
+    font-weight:600;
+}
+
+/* INPUT */
+form input{
+    width:100%;
+    padding:12px;
+    border-radius:12px;
+    border:1px solid #ddd;
+}
+
+/* RATING */
+.rating{
+    color:#f1c40f;
+}
+
+/* IMAGE */
+.card-img-top{
+    height:250px;
+    object-fit:cover;
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+
+    from {
+        opacity:0;
+        transform:translateY(20px);
+    }
+
+    to {
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+/* MODAL */
+.modal-backdrop.show {
+    opacity:0.6;
+}
+
+.modal.fade .modal-dialog {
+    transform:scale(0.9);
+    transition:all 0.2s ease;
+}
+
+.modal.show .modal-dialog {
+    transform:scale(1);
+}
+
+/* FILTERS */
+.filters{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:25px;
+}
+
+.filters input,
+.filters select{
+    padding:12px;
+    border-radius:12px;
+    border:1px solid #ddd;
+    background:white;
+}
+
+.filters button{
+    border-radius:12px;
+    padding:10px 20px;
+}
+
+/* TOAST */
+
+.custom-toast{
+    animation:toastFadeIn 0.4s ease;
+    border:none;
+    border-radius:14px;
+    overflow:hidden;
+}
+
+.custom-toast.hide-animation{
+    animation:toastFadeOut 0.4s ease forwards;
+}
+
+@keyframes toastFadeIn{
+
+    from{
+        opacity:0;
+        transform:translateY(-20px) scale(0.95);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+
+}
+
+@keyframes toastFadeOut{
+
+    from{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+
+    to{
+        opacity:0;
+        transform:translateY(-20px) scale(0.95);
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<script>
+
+window.addEventListener("pageshow", function(event) {
+
+    if (event.persisted) {
+        window.location.reload();
+    }
+
+});
+
+</script>
+
+<nav class="navbar navbar-dark shadow">
+
+    <div class="container">
+
+        <a class="navbar-brand" href="/">
+            🛍 Clothing Shop
+        </a>
+
+        <div>
+
+            <a class="btn btn-outline-light me-2"
+               href="{% url 'products' %}">
+
+                Products
+
+            </a>
+
+            <a class="btn btn-warning me-2 position-relative"
+               href="{% url 'cart' %}">
+
+                🛒 Cart
+
+                <span class="badge bg-dark ms-1">
+                    {{ cart_count|default:0 }}
+                </span>
+
+            </a>
+
+            {% if request.user.is_authenticated %}
+
+                <span class="text-white me-2">
+                    👤 {{ request.user.username }}
+                </span>
+
+                <form method="post"
+                      action="{% url 'logout' %}"
+                      style="display:inline;">
+
+                    {% csrf_token %}
+
+                    <button class="btn btn-light">
+                        Выйти
+                    </button>
+
+                </form>
+
+            {% else %}
+
+                <a class="btn btn-light me-2"
+                   href="{% url 'login' %}">
+
+                    Войти
+
+                </a>
+
+                <a class="btn btn-success"
+                   href="{% url 'signup' %}">
+
+                    Регистрация
+
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</nav>
+
+<div class="container mt-5">
+
+    {% if messages %}
+
+    <div class="toast-container position-fixed top-0 end-0 p-4"
+         style="z-index:9999;">
+
+        {% for message in messages %}
+
+        <div class="toast show custom-toast shadow mb-3"
+             role="alert">
+
+            <div class="toast-header bg-success text-white">
+
+                <strong class="me-auto">
+                    🛒 Корзина
+                </strong>
+
+                <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="toast">
+                </button>
+
+            </div>
+
+            <div class="toast-body">
+
+                {{ message }}
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <script>
+
+    setTimeout(() => {
+
+        document.querySelectorAll('.custom-toast').forEach(toast => {
+
+            toast.classList.add('hide-animation');
+
+            setTimeout(() => {
+                toast.remove();
+            }, 400);
+
+        });
+
+    }, 3000);
+
+    </script>
+
+    {% endif %}
+
+    {% block content %}
+    {% endblock %}
+
+</div>
+
+</body>
+</html>
