@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Чек заказа</title>
+</head>
+
+<body style="margin:0;padding:0;background:#f4f1ff;font-family:Arial,sans-serif;">
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0"
+       style="padding:40px 0;background:#f4f1ff;">
+
+<tr>
+<td align="center">
+
+<table width="700" cellpadding="0" cellspacing="0" border="0"
+       style="background:#ffffff;border-radius:24px;overflow:hidden;
+              box-shadow:0 10px 30px rgba(0,0,0,0.08);">
+
+    <!-- HEADER -->
+    <tr>
+        <td align="center"
+            style="padding:45px;
+                   background:linear-gradient(135deg,#ede9fe,#f5f3ff);">
+
+            <div style="font-size:54px;margin-bottom:10px;">
+                🛍️
+            </div>
+
+            <h1 style="margin:0;color:#1e1b4b;font-size:42px;">
+                SHOP
+            </h1>
+
+            <p style="color:#6b7280;font-size:18px;">
+                Спасибо за покупку!
+            </p>
+
+        </td>
+    </tr>
+
+    <!-- CONTENT -->
+    <tr>
+        <td style="padding:50px;">
+
+            <h2 style="text-align:center;font-size:36px;color:#111827;">
+                🧾 Чек заказа
+            </h2>
+
+            <p style="text-align:center;color:#6b7280;font-size:18px;">
+                Заказ успешно оплачен
+            </p>
+
+            <div style="
+                background:#faf8ff;
+                border:2px solid #ede9fe;
+                border-radius:20px;
+                padding:30px;
+                margin-top:35px;
+            ">
+
+                <p style="font-size:18px;color:#374151;">
+                    <strong>Покупатель:</strong>
+                    {{ order.customer_name }}
+                </p>
+
+                <p style="font-size:18px;color:#374151;">
+                    <strong>Email:</strong>
+                    {{ order.email }}
+                </p>
+
+                <p style="font-size:18px;color:#374151;">
+                    <strong>Дата:</strong>
+                    {{ order.created_at }}
+                </p>
+
+            </div>
+
+            <!-- PRODUCTS -->
+            <table width="100%"
+                   cellpadding="12"
+                   cellspacing="0"
+                   border="0"
+                   style="margin-top:35px;border-collapse:collapse;">
+
+                <tr style="background:#111827;color:white;">
+                    <th align="left">Товар</th>
+                    <th align="center">Кол-во</th>
+                    <th align="right">Цена</th>
+                </tr>
+
+                {% for item in items %}
+
+                <tr style="border-bottom:1px solid #e5e7eb;">
+
+                    <td>
+                        {{ item.product.name }}
+                    </td>
+
+                    <td align="center">
+                        {{ item.quantity }}
+                    </td>
+
+                    <td align="right">
+                        ${{ item.total_price }}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </table>
+
+            <!-- TOTAL -->
+            <div style="
+                margin-top:35px;
+                padding:25px;
+                border-radius:18px;
+                background:linear-gradient(135deg,#7c3aed,#5b21b6);
+                color:white;
+                text-align:center;
+            ">
+
+                <h2 style="margin:0;font-size:34px;">
+                    Итого: ${{ total }}
+                </h2>
+
+            </div>
+
+            <p style="
+                text-align:center;
+                margin-top:40px;
+                color:#6b7280;
+                font-size:16px;
+            ">
+                Спасибо за покупку в нашем магазине ❤️
+            </p>
+
+        </td>
+    </tr>
+
+</table>
+
+</td>
+</tr>
+
+</table>
+
+</body>
+</html>
